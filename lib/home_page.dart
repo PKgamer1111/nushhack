@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                 // Guide Button
                 ListTile(
                   leading: const Icon(Icons.help_outline),
-                  title: const Text('Guide'),
+                  title: const Text('Lifestyle'),
                   onTap: () {},
                 ),
                 // Predict Button
