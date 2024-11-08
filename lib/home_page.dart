@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nushhack/widgets/information_card.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +17,29 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   double healthScore = 85.0;
+
+  // Dropdown options for measures
+  final List<String> measures = [
+    'Blood Pressure',
+    'Heart Rate',
+    'Cholesterol',
+    'Glucose Level',
+    'BMI',
+    'Oxygen Saturation',
+    'Body Temperature',
+    'Respiratory Rate',
+    'Waist Circumference',
+    'Hip Circumference',
+    'Waist to Hip Ratio',
+    'Body Fat Percentage',
+    'Muscle Mass',
+    'Bone Density',
+    'Basal Metabolic Rate',
+    'VO2 Max',
+  ];
+
+  String selectedMeasure = 'Blood Pressure';
+  final TextEditingController valueController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +59,11 @@ class _HomePageState extends State<HomePage> {
         title: const Text('HealthLink'),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         leading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: const Icon(Icons.menu, color: Colors.white),
           onPressed: () {
-            // Open the drawer using the GlobalKey
             _scaffoldKey.currentState?.openDrawer();
           },
         ),
@@ -47,57 +74,69 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Circular Gauge displaying the dummy health score
-            Center(
-              child: SizedBox(
-                height: 200,
-                width: 200,
-                child: SfRadialGauge(
-                  axes: <RadialAxis>[
-                    RadialAxis(
-                      minimum: 0,
-                      maximum: 100,
-                      showLabels: false,
-                      showTicks: false,
-                      axisLineStyle: AxisLineStyle(
-                        thickness: 0.2,
-                        cornerStyle: CornerStyle.bothCurve,
-                        thicknessUnit: GaugeSizeUnit.factor,
-                        color: gaugeColor.withOpacity(0.3),
-                      ),
-                      pointers: <GaugePointer>[
-                        RangePointer(
-                          value: healthScore,
-                          cornerStyle: CornerStyle.bothCurve,
-                          width: 0.2,
-                          sizeUnit: GaugeSizeUnit.factor,
-                          gradient: SweepGradient(
-                            colors: [gaugeColor, gaugeColor.withOpacity(0.5)],
-                            stops: const [0.0, 1.0],
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text(
+                'Overall Score',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Card(
+                child: Center(
+                  child: SizedBox(
+                    height: 210,
+                    width: 200,
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: 100,
+                          showLabels: false,
+                          showTicks: false,
+                          axisLineStyle: AxisLineStyle(
+                            thickness: 0.2,
+                            cornerStyle: CornerStyle.bothCurve,
+                            thicknessUnit: GaugeSizeUnit.factor,
+                            color: gaugeColor.withOpacity(0.3),
                           ),
-                        ),
-                      ],
-                      annotations: <GaugeAnnotation>[
-                        GaugeAnnotation(
-                          widget: Text(
-                            '${healthScore.toStringAsFixed(1)} / 100',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: gaugeColor,
-                                ),
-                          ),
-                          angle: 90,
-                          positionFactor: 0.0,
+                          pointers: <GaugePointer>[
+                            RangePointer(
+                              value: healthScore,
+                              cornerStyle: CornerStyle.bothCurve,
+                              width: 0.2,
+                              sizeUnit: GaugeSizeUnit.factor,
+                              gradient: SweepGradient(
+                                colors: [gaugeColor, gaugeColor.withOpacity(0.5)],
+                                stops: const [0.0, 1.0],
+                              ),
+                            ),
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              widget: Text(
+                                '${healthScore.toStringAsFixed(1)} / 100',
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: gaugeColor,
+                                    ),
+                              ),
+                              angle: 90,
+                              positionFactor: 0.0,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 16),
-
-            // Left-aligned Health Status title
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Text(
@@ -107,16 +146,11 @@ class _HomePageState extends State<HomePage> {
                     ),
               ),
             ),
-
-            // InformationList Widget
             Expanded(
               child: InformationList(
                 bloodPressure: '120/80',
                 heartRate: 72,
-                cholesterol: 180,
-                glucoseLevel: 100,
                 bmi: 22.5,
-                condition: 'Healthy',
                 oxygenSaturation: 98,
                 bodyTemperature: 36.7,
               ),
@@ -124,10 +158,123 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: buildFloatingActionButton(context),
     );
   }
 
-  // Drawer implementation
+  Widget buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton.extended(
+      label: const Text('Add Record'),
+      icon: const Icon(Icons.add),
+      backgroundColor: Colors.blueAccent,
+      onPressed: () => showAddRecordDialog(context),
+    );
+  }
+
+  void showAddRecordDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('Add New Record'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Measure Dropdown
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+  child: DropdownButtonFormField2<String>(
+  buttonStyleData: ButtonStyleData(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  iconStyleData: IconStyleData(
+    icon: const Icon(Icons.arrow_forward_ios_outlined),
+    iconSize: 16,
+    iconEnabledColor: Colors.blueAccent,
+    iconDisabledColor: Colors.grey,
+  ),
+  dropdownStyleData: DropdownStyleData(
+    maxHeight: 250,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      color: Colors.white,
+    ),
+    offset: const Offset(0, -8),
+    scrollbarTheme: ScrollbarThemeData(
+      radius: const Radius.circular(20),
+      thickness: MaterialStateProperty.all<double>(5),
+      thumbVisibility: MaterialStateProperty.all<bool>(true),
+    ),
+  ),
+  value: selectedMeasure,
+  validator: (value) {
+    if (value == null) {
+      return 'Please select a measure.';
+    }
+    return null;
+  },
+  onChanged: (String? newValue) {
+    setState(() {
+      selectedMeasure = newValue!;
+    });
+  },
+  decoration: InputDecoration(
+    labelText: 'Select Measure',
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  items: measures.map((String measure) {
+    return DropdownMenuItem<String>(
+      value: measure,
+      child: Text(measure),
+    );
+  }).toList(),
+)
+),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              // Value Input Field
+              TextField(
+                controller: valueController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Value',
+                  border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                // Add functionality will be implemented later
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Add functionality will be implemented later
+                Navigator.of(context).pop();
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Drawer buildDrawer() {
     return Drawer(
       child: Column(
@@ -167,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                 // Guide Button
                 ListTile(
                   leading: const Icon(Icons.help_outline),
-                  title: const Text('Guide'),
+                  title: const Text('Lifestyle'),
                   onTap: () {},
                 ),
                 // Predict Button

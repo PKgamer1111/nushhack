@@ -7,7 +7,6 @@ class GaugeIndicator extends StatelessWidget {
   final double max;
   final List<LinearGaugeRange> ranges;
   final String label;
-  final String condition;
 
   const GaugeIndicator({
     Key? key,
@@ -16,7 +15,7 @@ class GaugeIndicator extends StatelessWidget {
     required this.max,
     required this.ranges,
     required this.label,
-    required this.condition,
+
   }) : super(key: key);
 
   @override
@@ -36,13 +35,7 @@ class GaugeIndicator extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             // Displaying the condition
-            Text(
-              'Condition: $condition',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: condition == 'Healthy' ? Colors.green : Colors.red,
-                  ),
-            ),
+
           ],
         ),
         
