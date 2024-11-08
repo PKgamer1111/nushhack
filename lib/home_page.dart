@@ -3,8 +3,6 @@ import 'package:nushhack/widgets/information_card.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -13,7 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // GlobalKey to control the drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   double healthScore = 85.0;

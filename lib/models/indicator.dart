@@ -1,3 +1,4 @@
+import 'package:nushhack/models/value_entry.dart';
 
 class Indicator {
   final double mean;
@@ -29,16 +30,56 @@ class Indicator {
 
   double get averageZScore => ZScore(averageValue);
 
-  // ignore: non_constant_identifier_names
   double ZScore(double value) {
     if (stdDev == 0) return 0.0;
     return (value - mean) / stdDev;
   }
-}
 
-class ValueEntry {
-  final DateTime dateTime;
-  final double value;
+  /// Converts the `Indicator` to a Firestore map.
+  Map<String, dynamic> toFirestore() {
+    return {
+      'mean': mean,
+      'stdDev': stdDev,
+      'name': name,
+      'units': units,
+      'values': values.map((v) => v.toFirestore()).toList(),
+    };
+  }
 
-  ValueEntry(this.dateTime, this.value);
+  /// Creates an `Indicator` from a Firestore map.
+  factory Indicator.fromFirestore(Map<String, dynamic> data) {
+    return Indicator(
+      mean: (data['mean'] as num).toDouble(),
+      stdDev: (data['stdDev'] as num).toDouble(),
+      name: data['name'] as String,
+      units: data['units'] as String,
+      values: (data['values'] as List<dynamic>)
+          .map((v) => ValueEntry.fromFirestore(v as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  /// Converts the `Indicator` to a JSON map.
+  Map<String, dynamic> toJSON() {
+    return {
+      'mean': mean,
+      'stdDev': stdDev,
+      'name': name,
+      'units': units,
+      'values': values.map((v) => v.toJSON()).toList(),
+    };
+  }
+
+  /// Creates an `Indicator` from a JSON map.
+  factory Indicator.fromJSON(Map<String, dynamic> data) {
+    return Indicator(
+      mean: (data['mean'] as num).toDouble(),
+      stdDev: (data['stdDev'] as num).toDouble(),
+      name: data['name'] as String,
+      units: data['units'] as String,
+      values: (data['values'] as List<dynamic>)
+          .map((v) => ValueEntry.fromJSON(v as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 }

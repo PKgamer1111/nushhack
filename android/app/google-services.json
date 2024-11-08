@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "721759612515",
+    "project_id": "healthlink-8d75e",
+    "storage_bucket": "healthlink-8d75e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721759612515:android:c7a47106763fa2ed0f5256",
+        "android_client_info": {
+          "package_name": "com.example.nushhack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDns-3vZBMndCvRHUy6x2j-j8V2nBbw9XE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
