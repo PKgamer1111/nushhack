@@ -5,6 +5,7 @@ import 'package:nushhack/guidance.dart';
 import 'package:nushhack/indicator_page.dart';
 import 'package:nushhack/interpret.dart';
 import 'package:nushhack/models/indicator.dart';
+import 'package:nushhack/widgets/gauge_indicator.dart';
 import 'package:nushhack/widgets/text_info.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -187,12 +188,20 @@ class _HomePageState extends State<HomePage> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
-                                      child: TextInfo(
-                                        label: item.name,
-                                        value: item.values.isNotEmpty ? item.values.last.value.toString() : 'N/A',
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // Displaying the indicator name and its latest value
+                                          Text(
+                                            "${item.name}: ${item.values.last.value.toStringAsFixed(2)} ${item.units}",
+                                          ),
+                                          const SizedBox(height: 16),
+                                          // Displaying the GaugeIndicator for the indicator's Z-score
+                                          GaugeIndicator(indicator: item),
+                                        ],
                                       ),
                                     ),
-                                  ),
+                                  )
                                 ),
                               );
                             },
@@ -233,6 +242,7 @@ class _HomePageState extends State<HomePage> {
       label: const Text('Add Record'),
       icon: const Icon(Icons.add),
       backgroundColor: Colors.blueAccent,
+      foregroundColor: Colors.white,
       onPressed: () => showAddRecordDialog(context, measures),
     );
   }

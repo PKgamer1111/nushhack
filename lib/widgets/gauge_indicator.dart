@@ -1,54 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:nushhack/models/indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class GaugeIndicator extends StatelessWidget {
-  final double value;
-  final double min;
-  final double max;
-  final List<LinearGaugeRange> ranges;
-  final String label;
+  final Indicator indicator;
 
   const GaugeIndicator({
     Key? key,
-    required this.value,
-    required this.min,
-    required this.max,
-    required this.ranges,
-    required this.label,
-
+    required this.indicator,
   }) : super(key: key);
+
+  double get zScore => indicator.latestZScore;
 
   @override
   Widget build(BuildContext context) {
+    // Color ranges for the gauge
+    final List<LinearGaugeRange> ranges = [
+      LinearGaugeRange(
+        startValue: -3,
+        endValue: -1,
+        color: Colors.red,
+      ),
+      LinearGaugeRange(
+        startValue: -1,
+        endValue: 1,
+        color: Colors.green,
+      ),
+      LinearGaugeRange(
+        startValue: 1,
+        endValue: 3,
+        color: Colors.red,
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Displaying the label and value
-            Text(
-              '$label: ${value.toStringAsFixed(1)}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            // Displaying the condition
-
-          ],
-        ),
-        
-        ),
-        const SizedBox(height: 10),
         SfLinearGauge(
-          minimum: min,
-          maximum: max,
+          minimum: -3,
+          maximum: 3,
           ranges: ranges,
+          showLabels: false, // Hides the numerical labels
+          showTicks: true, // Shows only the ticks
+          majorTickStyle: const LinearTickStyle(
+            length: 10,
+            thickness: 2,
+          ),
+          minorTickStyle: const LinearTickStyle(
+            length: 6,
+            thickness: 1.5,
+          ),
           markerPointers: [
-            // Inverted triangle pointer showing the current value
+            // Inverted triangle pointer to show the current Z-score
             LinearShapePointer(
-              value: value,
+              value: zScore,
               shapeType: LinearShapePointerType.invertedTriangle,
               color: Colors.black,
               position: LinearElementPosition.cross,

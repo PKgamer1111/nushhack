@@ -52,6 +52,7 @@ class _BiometricAuthenticationState extends State<BiometricAuthentication> {
         title: Text(widget.appBarTitle),
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
@@ -59,9 +60,9 @@ class _BiometricAuthenticationState extends State<BiometricAuthentication> {
           children: <Widget>[
             // Welcome Message
             const Text(
-              "Welcome to HealthLink",
+              "Welcome to HealthLink!",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -70,9 +71,9 @@ class _BiometricAuthenticationState extends State<BiometricAuthentication> {
 
             // App Logo
             Image.asset(
-              'assets/healthlink_logo.png',
-              width: 150,
-              height: 150,
+              'assets/appicon.png',
+              width: 300,
+              height: 300,
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 30),
@@ -99,12 +100,13 @@ class _BiometricAuthenticationState extends State<BiometricAuthentication> {
                     ),
                     child: const Text(
                       "Authorize now",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
                   ),
           ],
         ),
       ),
+      backgroundColor: Colors.white,
     );
   }
 }

@@ -333,14 +333,7 @@ EdgeInsets.symmetric(horizontal: 8),
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GaugeIndicator(
-          value: item['value'],
-          min: item['ranges'][0].startValue,
-          max: item['ranges'].last.endValue,
-          ranges: item['ranges'],
-          label: item['label'],
-          
-        ),
+        child: SizedBox()
       ),
     ),
   );

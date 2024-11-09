@@ -37,7 +37,7 @@ class _GuidancePageState extends State<GuidancePage> {
       "messages": [
         {
           "role": "system",
-          "content": "You are a healthcare guidance person. The user will give you all of the Z-Scores of his vitals, you will have to analyse his Z-Scores and suggest lifestyle changes that will bring his vitals back on track"
+          "content": "You are a healthcare guidance expert. The user will provide a list of Z-scores for various health indicators. Your role is to analyze these Z-scores, assess the user's current health status, and offer personalized, concise lifestyle recommendations to help bring their vitals back within the optimal range."
         },
         {
           "role": "user",
