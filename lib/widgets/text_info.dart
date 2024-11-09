@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class TextInfo extends StatelessWidget {
   final String label;
   final String value;
-  final Color color;
 
   const TextInfo({
     Key? key,
     required this.label,
     required this.value,
-    required this.color,
   }) : super(key: key);
 
   @override

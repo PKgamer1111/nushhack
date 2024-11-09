@@ -319,7 +319,6 @@ EdgeInsets.symmetric(horizontal: 8),
                             child: TextInfo(
                               label: item['label'],
                               value: item['value'],
-                              color: item['color'],
                             ),
                           ),
                         )

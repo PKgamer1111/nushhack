@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nushhack/biometric_authentication.dart';
 import 'package:nushhack/firebase_options.dart';
 import 'package:nushhack/viewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'home_page.dart';
 
 void main() async {
@@ -11,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load();
   runApp(
     ChangeNotifierProvider(
       create: (context) => Viewmodel(),
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'HealthLink',
       theme: _buildTheme(Brightness.light),
-      home:  const HomePage(),
+      home:  const BiometricAuthentication(appBarTitle: "HealthLink"),
     );
   }
 }
