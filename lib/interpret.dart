@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nushhack/guidance.dart';
 import 'package:nushhack/models/indicator.dart';
 import 'package:nushhack/viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +72,15 @@ class InterpretPage extends StatelessWidget {
                     Icons.circle,
                     color: color,
                   ),
+                  onTap: () {
+                    String req = "${indicator.name}: ${indicator.latestZScore}";
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GuidancePage(req: req, type: 2),
+                      ),
+                    );
+                  },
                 ),
               ),
             );

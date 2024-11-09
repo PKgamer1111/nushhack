@@ -348,7 +348,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GuidancePage(req: req),
+                  builder: (context) => GuidancePage(req: req, type: 1),
                 ),
               );
             },

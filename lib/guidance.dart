@@ -6,8 +6,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 class GuidancePage extends StatefulWidget {
   final String req;
+  final int type;
 
-  const GuidancePage({super.key, required this.req});
+  const GuidancePage({super.key, required this.req, required this.type});
 
   @override
   State<GuidancePage> createState() => _GuidancePageState();
@@ -32,7 +33,7 @@ class _GuidancePageState extends State<GuidancePage> {
       'Authorization': 'Bearer $apiKey',
     };
 
-    final body = jsonEncode({
+    var body = jsonEncode({
       "model": "gpt-4o-mini",
       "messages": [
         {
@@ -45,6 +46,22 @@ class _GuidancePageState extends State<GuidancePage> {
         }
       ]
     });
+
+    if(widget.type==2) {
+      body = jsonEncode({
+        "model": "gpt-4o-mini",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a healthcare guidance expert. The user will provide a Z-score for a specific health indicator. Your task is to briefly explain the significance of that indicator and offer concise, actionable lifestyle recommendations to help improve the user's health and bring the indicator back to the optimal range."
+          },
+          {
+            "role": "user",
+            "content": widget.req
+          }
+        ]
+      });
+    }
 
     try {
       final response = await http.post(Uri.parse(url), headers: headers, body: body);
