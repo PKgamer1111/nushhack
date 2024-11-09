@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage> {
         .where((indicator) => indicator.values.isNotEmpty && !indicator.latestZScore.isNaN)
         .map((indicator) {
           double zScore = indicator.latestZScore;
-          return "${indicator.name}: ${indicator.latestValue} ${indicator.units} (Z-Score: ${zScore.toStringAsFixed(2)})";
+          return "${indicator.name}: ${indicator.latestValue} ${indicator.units} (Z-Score: ${zScore.toStringAsFixed(2)})\n";
         })
         .toList();
 
