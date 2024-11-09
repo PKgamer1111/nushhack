@@ -29,6 +29,7 @@ class InterpretPage extends StatelessWidget {
         title: const Text('Interpret'),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

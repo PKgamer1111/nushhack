@@ -8,6 +8,7 @@ import 'package:nushhack/models/indicator.dart';
 import 'package:nushhack/widgets/gauge_indicator.dart';
 import 'package:nushhack/widgets/text_info.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'viewmodel.dart'; // Ensure this is correctly imported
 
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      drawer: buildDrawer(getIndicatorsSummary(indicators)),
+      drawer: buildDrawer(getIndicatorsSummary(indicators), getShareIndicatorsSummary(indicators)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -317,7 +318,21 @@ class _HomePageState extends State<HomePage> {
     return indicatorStrings.join(', ');
   }
 
-  Drawer buildDrawer(String req) {
+  String getShareIndicatorsSummary(List<Indicator> indicators) {
+    // Filter out indicators that have no values or invalid Z-Scores
+    List<String> indicatorStrings = indicators
+        .where((indicator) => indicator.values.isNotEmpty && !indicator.latestZScore.isNaN)
+        .map((indicator) {
+          double zScore = indicator.latestZScore;
+          return "${indicator.name}: ${indicator.latestValue} ${indicator.units} (Z-Score: ${zScore.toStringAsFixed(2)})";
+        })
+        .toList();
+
+    // Join the list into a single string separated by commas
+    return indicatorStrings.join(', ');
+  }
+
+  Drawer buildDrawer(String req, String shareString) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -340,26 +355,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          // Guide Button
-          ListTile(
-            leading: const Icon(Icons.help_outline),
-            title: const Text('Guide'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GuidancePage(req: req, type: 1),
-                ),
-              );
-            },
-          ),
-          // Predict Button
-          ListTile(
-            leading: const Icon(Icons.analytics),
-            title: const Text('Predict'),
-            onTap: () {},
-          ),
-          // Interpret Button
           ListTile(
             leading: const Icon(Icons.insights),
             title: const Text('Interpret'),
@@ -372,17 +367,30 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.blueGrey,
-            ),
-            child: const Text(
-              'Version 1.0.0',
-              style: TextStyle(color: Colors.white),
-            ),
+          ListTile(
+            leading: const Icon(Icons.help_outline),
+            title: const Text('Guide'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GuidancePage(req: req, type: 1),
+                ),
+              );
+            },
           ),
+          ListTile(
+            leading: const Icon(Icons.analytics),
+            title: const Text('Predict'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.import_export),
+            title: const Text('Export'),
+            onTap: () {
+              Share.share(shareString);
+            },
+          )
         ],
       ),
     );
